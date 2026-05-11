@@ -3,16 +3,22 @@ pipeline {
 
     stages {
 
-       stage('Docker Login') {
-    steps {
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'sonar-scanner'
 
-        withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    withSonarQubeEnv('sonar-server') {
 
-            bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
-
-        }
-    }
-}
+                        bat """
+                        ${scannerHome}\\bin\\sonar-scanner.bat ^
+                        -Dsonar.projectKey=netflix ^
+                        -Dsonar.sources=. ^
+                        -Dsonar.host.url=http://localhost:9000
+                        """
+                    }
+                }
+            }
         }
 
         stage('Build Docker Image') {
@@ -23,9 +29,16 @@ pipeline {
 
         stage('Docker Login') {
             steps {
-withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-    bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
-}            }
+
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+
+                    bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                }
+            }
         }
 
         stage('Push Docker Image') {
@@ -41,6 +54,5 @@ withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 
                 bat 'docker run -d -p 8090:80 --name netflix netflix-clone'
             }
         }
-
     }
 }
