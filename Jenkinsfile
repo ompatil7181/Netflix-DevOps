@@ -19,8 +19,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t netflix-clone .'
-            }
+bat 'docker tag netflix-clone omkarpatil19/netflix:latest'            }
         }
 
         stage('Push Docker Image') {
