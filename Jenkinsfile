@@ -4,10 +4,10 @@ pipeline {
     stages {
 
   bat """
-${scannerHome}\\bin\\sonar-scanner.bat ^
--Dsonar.projectKey=netflix ^
--Dsonar.sources=. ^
--Dsonar.host.url=http://localhost:9000 ^
+${scannerHome}\\bin\\sonar-scanner.bat 
+-Dsonar.projectKey=netflix 
+-Dsonar.sources=. 
+-Dsonar.host.url=http://localhost:9000 
 -Dsonar.exclusions=node_modules/**,dist/**,.scannerwork/**,.git/**
 """
 
