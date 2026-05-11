@@ -11,7 +11,7 @@ pipeline {
                     -Dsonar.projectKey=netflix ^
                     -Dsonar.sources=. ^
                     -Dsonar.host.url=http://localhost:9000 ^
-                    -Dsonar.login=sqa_57c839ab6fffa23d849ff97b7b3c5d5c74003c5c
+                    -Dsonar.login=YOUR_SONAR_TOKEN
                     '''
                 }
             }
@@ -19,13 +19,20 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-bat 'docker tag netflix-clone omkarpatil19/netflix:latest'            }
+                bat 'docker build -t netflix-clone .'
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                bat 'docker login -u omkarpatil19 -p 9028609403'
+            }
         }
 
         stage('Push Docker Image') {
             steps {
-                bat 'docker tag netflix-clone omkarpatil19/netflix'
-                bat 'docker push omkarpatil19/netflix'
+                bat 'docker tag netflix-clone omkarpatil19/netflix:latest'
+                bat 'docker push omkarpatil19/netflix:latest'
             }
         }
 
