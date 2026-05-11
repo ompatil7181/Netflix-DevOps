@@ -9,13 +9,9 @@ pipeline {
                     def scannerHome = tool 'sonar-scanner'
 
                     withSonarQubeEnv('sonar-server') {
-                        bat """
-                        ${scannerHome}\\bin\\sonar-scanner.bat ^
-                        -Dsonar.projectKey=netflix ^
-                        -Dsonar.sources=. ^
-                        -Dsonar.host.url=http://localhost:9000 ^
-                        -Dsonar.login=sqa_57c839ab6fffa23d849ff97b7b3c5d5c74003c5c
-                        """
+
+                        bat "${scannerHome}\\bin\\sonar-scanner.bat -Dsonar.projectKey=netflix -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqa_57c839ab6fffa23d849ff97b7b3c5d5c74003c5c"
+
                     }
                 }
             }
