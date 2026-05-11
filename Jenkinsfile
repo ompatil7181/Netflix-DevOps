@@ -3,13 +3,25 @@ pipeline {
 
     stages {
 
-  bat """
-${scannerHome}\\bin\\sonar-scanner.bat 
--Dsonar.projectKey=netflix 
--Dsonar.sources=. 
--Dsonar.host.url=http://localhost:9000 
--Dsonar.exclusions=node_modules/**,dist/**,.scannerwork/**,.git/**
-"""
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+
+                    def scannerHome = tool 'sonar-scanner'
+
+                    withSonarQubeEnv('sonar-server') {
+
+                        bat """
+                        ${scannerHome}\\bin\\sonar-scanner.bat ^
+                        -Dsonar.projectKey=netflix ^
+                        -Dsonar.sources=. ^
+                        -Dsonar.host.url=http://localhost:9000 ^
+                        -Dsonar.exclusions=node_modules/**,dist/**,.scannerwork/**,.git/**
+                        """
+                    }
+                }
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
