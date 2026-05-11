@@ -8,7 +8,7 @@ COPY . .
 # SERVE STAGE
 FROM nginx:stable-alpine
 
-COPY . /usr/share/nginx/html
+COPY --from=builder /app /usr/share/nginx/html
 
 EXPOSE 80
 
