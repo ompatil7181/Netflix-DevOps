@@ -3,27 +3,29 @@ pipeline {
 
     stages {
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'sonar-scanner'
+       stage('SonarQube Analysis') {
+    steps {
+        script {
+            def scannerHome = tool 'sonar-scanner'
 
-                    withSonarQubeEnv('sonar-server') {
+            withSonarQubeEnv('sonar-server') {
 
-                        bat """
-                        set SONAR_SCANNER_OPTS=-Xmx512m
+                bat """
+                set SONAR_SCANNER_OPTS=-Xmx256m
+                set JAVA_OPTS=-Xmx256m
 
-                        ${scannerHome}\\bin\\sonar-scanner.bat ^
-                        -Dsonar.projectKey=netflix ^
-                        -Dsonar.sources=. ^
-                        -Dsonar.host.url=http://localhost:9000 ^
-                        -Dsonar.exclusions=node_modules/**,dist/**,.scannerwork/**,.git/**,coverage/** ^
-                        -Dsonar.javascript.node.maxspace=512
-                        """
-                    }
-                }
+                ${scannerHome}\\bin\\sonar-scanner.bat ^
+                -Dsonar.projectKey=netflix ^
+                -Dsonar.sources=. ^
+                -Dsonar.host.url=http://localhost:9000 ^
+                -Dsonar.exclusions=node_modules/**,dist/**,.scannerwork/**,.git/**,coverage/**,*.log ^
+                -Dsonar.text.inclusions=NONE ^
+                -Dsonar.javascript.node.maxspace=256
+                """
             }
         }
+    }
+}
 
         stage('Build Docker Image') {
             steps {
