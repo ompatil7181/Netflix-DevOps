@@ -6,17 +6,19 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-
                     def scannerHome = tool 'sonar-scanner'
 
                     withSonarQubeEnv('sonar-server') {
 
                         bat """
+                        set SONAR_SCANNER_OPTS=-Xmx512m
+
                         ${scannerHome}\\bin\\sonar-scanner.bat ^
                         -Dsonar.projectKey=netflix ^
                         -Dsonar.sources=. ^
                         -Dsonar.host.url=http://localhost:9000 ^
-                        -Dsonar.exclusions=node_modules/**,dist/**,.scannerwork/**,.git/**
+                        -Dsonar.exclusions=node_modules/**,dist/**,.scannerwork/**,.git/**,coverage/** ^
+                        -Dsonar.javascript.node.maxspace=512
                         """
                     }
                 }
@@ -52,7 +54,7 @@ pipeline {
 
         stage('Run Container') {
             steps {
-                bat 'docker rm -f netflix'
+                bat 'docker rm -f netflix || exit 0'
                 bat 'docker run -d -p 8090:80 --name netflix netflix-clone'
             }
         }
