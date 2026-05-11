@@ -17,6 +17,7 @@ pipeline {
         }
     }
 }
+}
 
         stage('Build Docker Image') {
             steps {
@@ -26,7 +27,7 @@ pipeline {
 
         stage('Docker Login') {
             steps {
-                bat 'docker login -u omkarpatil19 -p YOUR_PASSWORD'
+                bat 'docker login -u omkarpatil19 -p 9028609403'
             }
         }
 
