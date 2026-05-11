@@ -3,21 +3,17 @@ pipeline {
 
     stages {
 
-        stage('SonarQube Analysis') {
+       stage('Docker Login') {
     steps {
-        script {
 
-            def scannerHome = tool 'sonar-scanner'
+        withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
 
-            withSonarQubeEnv('sonar-server') {
+            bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
 
-                bat "${scannerHome}\\bin\\sonar-scanner.bat -Dsonar.projectKey=netflix -Dsonar.sources=."
-
-            }
         }
     }
 }
-}
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -27,8 +23,9 @@ pipeline {
 
         stage('Docker Login') {
             steps {
-                bat 'docker login -u omkarpatil19 -p 9028609403'
-            }
+withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+    bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+}            }
         }
 
         stage('Push Docker Image') {
@@ -44,4 +41,6 @@ pipeline {
                 bat 'docker run -d -p 8090:80 --name netflix netflix-clone'
             }
         }
+
     }
+}
