@@ -9,6 +9,13 @@ pipeline {
             }
         }
 
+        stage('Push Docker Image') {
+            steps {
+                bat 'docker tag netflix-clone omkarpatil19/netflix'
+                bat 'docker push omkarpatil19/netflix'
+            }
+        }
+
         stage('Run Container') {
             steps {
                 bat 'docker rm -f netflix'
