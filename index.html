@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Netflix Clone</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+        body {
+            background: #141414;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .banner {
+            background-image:
+                linear-gradient(to top, #141414, transparent),
+                url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba');
+            background-size: cover;
+            background-position: center;
+            height: 90vh;
+        }
+
+        .movie-row {
+            scrollbar-width: none;
+        }
+
+        .movie-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.08);
+            z-index: 50;
+        }
+
+        .glass-nav {
+            backdrop-filter: blur(14px);
+            background: rgba(0, 0, 0, 0.35);
+            transition: all 0.4s ease;
+        }
+
+        .solid-nav {
+            background: #141414;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav id="navbar" class="glass-nav fixed top-0 w-full z-50 px-8 py-4 flex justify-between items-center">
+
+        <img src="./assets/netflix.png" alt="Netflix Logo" class="w-32 object-contain" />
+
+        <div class="flex gap-4 items-center">
+            <input type="text" id="searchInput" placeholder="Search movies..."
+                class="px-4 py-2 rounded bg-black/50 border border-gray-700 text-white outline-none" />
+
+            <i class="fa-solid fa-user text-2xl"></i>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="banner flex items-center px-10">
+
+        <div class="max-w-xl">
+            <h1 class="text-6xl font-extrabold mb-4">
+                Stranger Things
+            </h1>
+
+            <p class="text-lg text-gray-300 mb-6">
+                When a young boy vanishes, a small town uncovers mystery,
+                experiments, and terrifying supernatural forces.
+            </p>
+
+            <div class="flex gap-4">
+
+                <button class="bg-white text-black px-6 py-3 rounded font-semibold hover:bg-gray-300 transition">
+                    <i class="fa-solid fa-play mr-2"></i>
+                    Play
+                </button>
+
+                <button class="bg-gray-700/70 px-6 py-3 rounded font-semibold hover:bg-gray-600 transition">
+                    <i class="fa-solid fa-circle-info mr-2"></i>
+                    More Info
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- MOVIE ROWS -->
+    <main class="px-8 mt-8 space-y-10">
+
+        <section>
+            <h2 class="text-2xl font-bold mb-4">Trending Now</h2>
+
+            <div id="trending" class="movie-row flex gap-4 overflow-x-scroll pb-4">
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold mb-4">Netflix Originals</h2>
+
+            <div id="originals" class="movie-row flex gap-4 overflow-x-scroll pb-4">
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
