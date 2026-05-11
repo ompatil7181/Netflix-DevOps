@@ -3,6 +3,20 @@ pipeline {
 
     stages {
 
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    bat '''
+                    sonar-scanner ^
+                    -Dsonar.projectKey=netflix ^
+                    -Dsonar.sources=. ^
+                    -Dsonar.host.url=http://localhost:9000 ^
+                    -Dsonar.login=sqa_57c839ab6fffa23d849ff97b7b3c5d5c74003c5c
+                    '''
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 bat 'docker build -t netflix-clone .'
@@ -10,12 +24,11 @@ pipeline {
         }
 
         stage('Push Docker Image') {
-    steps {
-        bat 'docker login -u omkarpatil19 -p 9028609403'
-        bat 'docker tag netflix-clone omkarpatil19/netflix'
-        bat 'docker push omkarpatil19/netflix'
-    }
-}
+            steps {
+                bat 'docker tag netflix-clone omkarpatil19/netflix'
+                bat 'docker push omkarpatil19/netflix'
+            }
+        }
 
         stage('Run Container') {
             steps {
